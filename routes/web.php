@@ -17,3 +17,4 @@ Route::get('/', function () {
 
 
 Route::get('/yahoo-finance', 'YahooFinance@index');
+Route::get('/yahoo-finance/getname', 'YahooFinance@getName');

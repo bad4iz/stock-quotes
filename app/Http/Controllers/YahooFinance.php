@@ -40,9 +40,20 @@ class YahooFinance extends Controller
         // Returns an array of Scheb\YahooFinanceApi\Results\Quote
         $quotes = $client->getQuotes(["AAPL", "GOOG"]);
 
-        return response()->json(['data' => $searchResult]);
+        return response()->json($searchResult);
     
     }
 
+    public function getName(Request $request)
+    {
+      $options = [/*...*/];
+      $guzzleClient = new Client($options);
+      $client = ApiClientFactory::createApiClient($guzzleClient);
+
+      // Returns an array of Scheb\YahooFinanceApi\Results\SearchResult
+      $searchResult = $client->search($request->name);
+
+      return response()->json($searchResult);
+    }
 
 }
