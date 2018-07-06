@@ -1,16 +1,30 @@
 <template>
-    <div class="container">
+    <div class="text-xs-center">
         <v-app>
+            <v-progress-linear
+                    background-color="white"
+                    :indeterminate="loadIndeterminate"></v-progress-linear>
             <v-content>
 
                 <v-flex xs12 sm6 md3>
                     <v-text-field v-model="name"
-                            label="имя"
+                                  label="имя"
                     ></v-text-field>
                 </v-flex>
 
 
-                <v-btn color="success" @click="send">Success</v-btn>
+                <v-btn  v-if="!loadIndeterminate"
+                        color="success" @click="send">отправить</v-btn>
+
+                <v-progress-circular
+                        :indeterminate="loadIndeterminate"
+                        v-if="loadIndeterminate"
+                        :size="70"
+                        :width="7"
+                        color="purple"
+                        indeterminate
+                ></v-progress-circular>
+
 
 
                 <v-list>
@@ -50,14 +64,19 @@
     data: () => ({
       name: '',
       listCompany: {},
+      loadIndeterminate: false,
     }),
     methods: {
-      send(){
-        axios
-          .get(`yahoo-finance/getname?name=${this.name}`)
-          .then(response => {
-            this.listCompany = response.data;
-          });
+      send() {
+        if (this.name.length > 3) {
+        this.loadIndeterminate = true;
+          axios
+            .get(`yahoo-finance/getname?name=${this.name}`)
+            .then(response => {
+              this.listCompany = response.data;
+              this.loadIndeterminate = false;
+            });
+        }
       }
     },
     mounted() {
@@ -65,3 +84,8 @@
     }
   }
 </script>
+
+<style lang="sass" scoped>
+    .v-progress-circular
+        margin: 1rem
+</style>
